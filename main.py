@@ -1,6 +1,6 @@
 import numpy as np
 import pygame
-
+from presets import PRESET_ORBITS
 
 # 6.6743015 * (10 ** -11)
 G = 1
@@ -35,11 +35,16 @@ class Body:
 
 
 class Sim:
-    def __init__(self):
+    def __init__(self, preset_name="simple_three"):
+        preset = PRESET_ORBITS[preset_name]
         self.bodies = [
-            Body(640, 360, 0, 0, 1e6, (255, 255, 0)),  # Sun in the middle
-            Body(740, 360, 0, 50, 1, (0, 255, 255)),   # Planet A
-            Body(540, 360, 0, -50, 1, (255, 0, 255))   # Planet B
+            Body(
+                b["x"], b["y"],
+                b["vx"], b["vy"],
+                b["mass"],
+                b["color"]
+            )
+            for b in preset["bodies"]
         ]
 
     def compute_gravity(self, dt):
@@ -50,8 +55,9 @@ class Sim:
                     continue
                 dx = b2.x - b1.x
                 dy = b2.y - b1.y
-                dist_squared = dx**2 + dy**2
-                dist = np.sqrt(dist_squared) + 1e-10 # avioding 0 division
+                epsilon = 1e-10
+                dist_squared = dx**2 + dy**2 + epsilon
+                dist = np.sqrt(dist_squared)
                 force = G * b1.mass * b2.mass / dist_squared
                 fx += force * dx / dist
                 fy += force * dy / dist
@@ -67,23 +73,24 @@ class Sim:
             body.draw(screen)
 
 def run():
-        pygame.init()
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        clock = pygame.time.Clock()
-        sim = Sim()
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    clock = pygame.time.Clock()
+    
+    sim = Sim(preset_name="two_to_one_resonance")
 
-        while True:
-            dt = clock.tick(60) / 1000.0
+    while True:
+        dt = clock.tick(60) / 1000.0
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-                    pygame.quit()
-                    raise SystemExit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+                pygame.quit()
+                raise SystemExit
 
-            sim.update(dt)
-            screen.fill((0, 0, 0))
-            sim.draw(screen)
-            pygame.display.flip()
+        sim.update(dt)
+        screen.fill((0, 0, 0))
+        sim.draw(screen)
+        pygame.display.flip()
 
 if __name__ == "__main__":
     run()
