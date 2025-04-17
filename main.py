@@ -77,7 +77,7 @@ def run():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
     
-    sim = Sim(preset_name="two_to_one_resonance")
+    sim = Sim(preset_name="orbiting_pair")
 
     while True:
         dt = clock.tick(60) / 1000.0
