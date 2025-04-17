@@ -5,7 +5,7 @@ import pygame
 # 6.6743015 * (10 ** -11)
 G = 1
 WIDTH, HEIGHT = 1280, 720
-SCALE = 2  # 1 million meters = 1 pixel
+SCALE = 4
 
 class Body:
     def __init__(self, x, y, vx, vy, mass, color=(255, 0, 0)):
