@@ -29,8 +29,8 @@ class Body:
     def draw(self, screen):
         if not (np.isfinite(self.x) and np.isfinite(self.y)):
             return
-        screen_x = int(self.x / SCALE + WIDTH // 2)
-        screen_y = int(self.y / SCALE + HEIGHT // 2)
+        screen_x = int(self.x)
+        screen_y = int(self.y)
         pygame.draw.circle(screen, self.color, (screen_x, screen_y), 6)
 
 
