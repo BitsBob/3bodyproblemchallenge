@@ -5,7 +5,7 @@ import pygame
 # 6.6743015 * (10 ** -11)
 G = 1
 WIDTH, HEIGHT = 1280, 720
-SCALE = 4
+SCALE = 1
 
 class Body:
     def __init__(self, x, y, vx, vy, mass, color=(255, 0, 0)):
@@ -29,8 +29,8 @@ class Body:
     def draw(self, screen):
         if not (np.isfinite(self.x) and np.isfinite(self.y)):
             return
-        screen_x = int(self.x)
-        screen_y = int(self.y)
+        screen_x = int(self.x / SCALE)
+        screen_y = int(self.y / SCALE)
         pygame.draw.circle(screen, self.color, (screen_x, screen_y), 6)
 
 
